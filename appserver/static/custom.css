@@ -1,0 +1,215 @@
+#cpu_stats .none.single-value:before {
+	display:inherit;
+	background: url('cpu.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#cpu_stats .elevated.single-value:before {
+	display:inherit;
+	background: url('cpu_elevated.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#cpu_stats .severe.single-value:before {
+	display:inherit;
+	background: url('cpu_severe.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#network_stats .none.single-value:before {
+	display:inherit;
+	background: url('network.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#network_stats .elevated.single-value:before {
+	display:inherit;
+	background: url('network_elevated.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#network_stats .severe.single-value:before {
+	display:inherit;
+	background: url('network_severe.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#paging_file_stats .none.single-value:before {
+	display:inherit;
+	background: url('paging_file.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#paging_file_stats .elevated.single-value:before {
+	display:inherit;
+	background: url('paging_file_elevated.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#paging_file_stats .severe.single-value:before {
+	display:inherit;
+	background: url('paging_file_severe.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#physical_disk_stats .none.single-value:before {
+	display:inherit;
+	background: url('physical_disk.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#physical_disk_stats .elevated.single-value:before {
+	display:inherit;
+	background: url('physical_disk_elevated.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#physical_disk_stats .severe.single-value:before {
+	display:inherit;
+	background: url('physical_disk_severe.svg');
+	background-size: 100px 100px !important;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#memory_stats .none.single-value:before {
+	display:inherit;
+	background: url('memory.svg');
+	background-size: 150px 150px !important;
+	background-repeat: no-repeat;
+	height: 150px;
+	width: 150px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#memory_stats .elevated.single-value:before {
+	display:inherit;
+	background: url('memory_elevated.svg');
+	background-size: 150px 150px !important;
+	background-repeat: no-repeat;
+	height: 150px;
+	width: 150px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#memory_stats .severe.single-value:before {
+	display:inherit;
+	background: url('memory_severe.svg');
+	background-size: 150px 150px !important;
+	background-repeat: no-repeat;
+	height: 150px;
+	width: 150px;
+	position: absolute;
+	top: 50%;
+	content: " " !important;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+text.single-result {
+    display: none;
+}
+
+

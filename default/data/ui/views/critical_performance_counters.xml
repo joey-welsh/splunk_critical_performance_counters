@@ -1,0 +1,648 @@
+<dashboard theme="dark" stylesheet="custom.css" hideAppBar="true" hideFooter="true" script="hideshow.js">
+  <label>Critical Windows Performance Counters</label>
+  <row>
+    <panel>
+      <title>CPU</title>
+      <single id="cpu_stats" depends="$cpu_value_1$,$cpu_value_2$">
+        <search>
+          <query>| stats count as value | eval value=if($cpu_value_1$>$cpu_value_2$, $cpu_value_1$, $cpu_value_2$) | rangemap field=value none=0-20 elevated=20-50 severe=50-100</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="classField">range</option>
+        <option name="field">value</option>
+      </single>
+      <html>
+     <div id="box-flow" style="padding-left:15px; font-size: 14px;" class="panel_summary">
+        <details ontoggle="mydetfunction()">
+            <summary>
+              <i class="icon-question-circle" style="font-size:16px;padding-left:5px;padding-right:5px;color:#007ABD;"/>
+              <i>
+                <b>Summary</b>
+              </i>
+            </summary>
+        <br/>
+        <p style="padding-right:20px;">Windows CPU usage is often focused on a headline “CPU % used” as an overall measure of CPU performance, but there are other CPU metrics that can provide a more detailed picture of the overall system state.</p>
+          <ol style="padding-right:20px;">
+            <li>
+              <b>
+                <u>% Processor Time</u>
+              </b> – This metric used for % CPU time in most cases. Technically % Processor Time is calculated as “100 - % Idle Time”, where % Idle Time is the percentage of time the processors are not processing threads. However, this works out in almost all cases to be the same as % Privileged Time + % Processor Time. Monitor % Processor Time and alert if it is consistently > 80%.
+            </li>
+            <li>
+              <b>
+                <u>% Privileged Time</u>
+              </b> – In general, % Privileged Time should be &lt; 30% of total CPU, but this value should be adjusted based on a baseline of your workload. If % Privileged Time is consistently high, you can investigate further by looking at additional counters:
+                <ul>
+                  <li>
+                    <b>
+                      <u>% Interrupt Time </u>
+                    </b> – Interrupts are higher priority threads used by the OS to handle hardware requests, and if % Interrupt Time > 20%, this can indicate a hardware or driver problem.
+                  </li>
+                  <li>
+                    <b>
+                      <u>% DPC time  </u>
+                    </b> – DPC is a “deferred procedure call”, which is a hardware interrupt that runs at a lower priority. As with % Interrupt Time, if % DPC Time is > 20%, the issue is likely a hardware or driver problem.
+                  </li>
+                  <li>
+                    <b>
+                      <u>Context Switches/Sec </u>
+                    </b> – A context switch occurs when the CPU switches execution from one thread to another, either because the thread’s task has completed or because a higher priority thread interrupts a lower priority thread. There will always be context switches on a processor, but if too many high priority threads push themselves to the head of the queue then CPU performance will degrade. Baseline the Context Switches/Sec value for your system and look for spikes that could indicate interrupts from failing hardware or badly written drivers or software.
+                  </li>
+                </ul>
+              </li>
+          </ol>
+        </details>
+      </div> 
+      </html>
+      <viz type="status_indicator_app.status_indicator" id="cpu_value_1">
+        <title>% Servers -&gt; % Processor Time &gt; 80</title>
+        <search>
+          <!--<query>sourcetype="perfmon:cpu"  counter="% Processor Time" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=80, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="cpu_value_1">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="cpu_value_2">
+        <title>% Servers -&gt; % Privileged Time &gt; 30</title>
+        <search>
+          <!--<query>sourcetype="perfmon:cpu"  counter="% Privileged Time" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=30, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="cpu_value_2">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <html>
+        <div>
+          <button class="btn btn-primary" id="more_cpu">Show Metrics</button>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>Physical Disk</title>
+      <single id="physical_disk_stats" depends="$physical_disk_value_1$,$physical_disk_value_2$,$physical_disk_value_3$,$physical_disk_value_4$">
+        <search>
+          <query>| stats count as value | eval value1=if($physical_disk_value_1$&gt;$physical_disk_value_2$, $physical_disk_value_1$, $physical_disk_value_2$) | eval value2=if($physical_disk_value_3$&gt;$physical_disk_value_4$, $physical_disk_value_3$, $physical_disk_value_4$) | eval value3=if(value1&gt;value2, value1, value2)  | rangemap field=value3 none=0-20 elevated=20-50 severe=50-100</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="classField">range</option>
+        <option name="field">value</option>
+        <option name="refresh.display">progressbar</option>
+      </single>
+      <html>
+       <div id="box-flow" style="padding-left:15px; font-size: 14px;" class="panel_summary">
+        <details ontoggle="mydetfunction()">
+          <summary>
+              <i class="icon-question-circle" style="font-size:16px;padding-left:5px;padding-right:5px;color:#007ABD;"/>
+              <i>
+                <b>Summary</b>
+              </i>
+          </summary>
+        <br/>
+        <p style="padding-right:20px;">The PhysicalDisk counters monitor disk drives on the computer. Their numbers are the sum of the access to all partitions on the physical instance, not strict only to the logical drives. Here are 4 of them that you should not miss.</p>
+          <ol style="padding-right:20px;">
+            <li>
+                <b>
+                  <u>% Idle Time</u>
+                </b> – should not be less than 60%. Preferably staying at the top of your chart at all time.</li>
+            <li>
+                <b>
+                  <u>Avg. Disk sec/read</u>
+                </b> – should not be higher than 20ms.</li>
+            <li>
+                <b>
+                  <u>Avg. Disk sec/write</u>
+                </b> – should not be higher than 20ms.<br/>
+                <p>Both (2) and (3) are the ones in Performance Monitor to measure the IO latency. The higher number usually indicating a problem that is hard disk related, either a program that constantly accessing the disk more often than usual, or a hard disk is failing.</p>
+              </li>
+            <li>
+                <b>
+                  <u>Current Disk Queue Length</u>
+                </b> – should not be higher than 2.</li>
+          </ol>
+        </details>
+      </div> 
+      </html>
+      <viz type="status_indicator_app.status_indicator" id="physical_disk_value_1">
+        <title>% Servers -&gt; % Idle Time &gt; 60</title>
+        <search>
+          <!--<query>sourcetype="Perfmon:PhysicalDisk" counter="% Idle Time" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=60, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="physical_disk_value_1">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="physical_disk_value_2">
+        <title>% Servers -&gt; Avg. Disk sec/Read &gt; 20ms</title>
+        <search>
+          <!--<query>sourcetype="Perfmon:PhysicalDisk" counter="Avg. Disk sec/Read" | eval Value = Value*1000 | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=20, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove/query>-->
+          <query>| stats count as percentAbove | eval percentAbove=44 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="physical_disk_value_2">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="physical_disk_value_3">
+        <title>%Servers -&gt; Avg. Disk sec/Write &gt; 20ms</title>
+        <search>
+          <!--<query>sourcetype="Perfmon:PhysicalDisk" counter="Avg. Disk sec/Write" | eval Value = Value*1000 | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=20, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove/query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="physical_disk_value_3">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="physical_disk_value_4">
+        <title>% Servers -&gt; Current Disk Queue Length &gt; 2</title>
+        <search>
+          <!--<query>sourcetype="Perfmon:PhysicalDisk" counter="Current Disk Queue Length" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=2, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=2 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="physical_disk_value_4">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <html>
+        <div>
+          <button class="btn btn-primary" id="more_physical_disk">Show Metrics</button>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>Memory</title>
+      <single id="memory_stats" depends="$memory_value_1$,$memory_value_2$,$memory_value_3$">
+        <search>
+          <query>| stats count as value | eval value1=if($memory_value_1$&gt;$memory_value_2$, $memory_value_1$, $memory_value_2$) | eval value2=if(value1&gt;$memory_value_3$, value1, $memory_value_3$)  | rangemap field=value2 none=0-20 elevated=20-50 severe=50-100</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="classField">range</option>
+        <option name="field">value</option>
+      </single>
+      <html>
+       <div id="box-flow" style="padding-left:15px; font-size: 14px;" class="panel_summary">
+        <details ontoggle="mydetfunction()">
+            <summary>
+              <i class="icon-question-circle" style="font-size:16px;padding-left:5px;padding-right:5px;color:#007ABD;"/>
+              <i>
+                <b>Summary</b>
+              </i>
+            </summary>
+        <br/>
+        <p style="padding-right:20px;">The Memory counters are great resources to identify if your system is suffering because of the memory-related bottleneck.</p>
+          <ol style="padding-right:20px;">
+            <li>
+                <b>
+                  <u>Available MBytes</u>
+                </b> – minimum 10% of memory should be free and available. Less than that usually indicating there is insufficient memory which can increase paging activity. You should consider adding more RAM if that happens.
+            </li>
+            <li>
+                <b>
+                  <u>Pages/sec</u>
+                </b> – should not be higher than 1000. A number higher than that, as a result of excessive paging, usually indicates there may be a memory leak happening.
+            </li>
+            <li>
+                <b>
+                  <u>Cache Bytes</u>
+                </b> – indicates the amount of memory being used for the file system cache. There may be a disk bottleneck if this value is greater than 300MB.
+            </li>
+          </ol>
+        </details>
+      </div> 
+      </html>
+      <viz type="status_indicator_app.status_indicator" id="memory_value_1">
+        <title>% Servers -&gt; Avail MB &lt; 10%</title>
+        <search>
+          <!--<query>sourcetype="perfmon:memory"  counter="% Committed Bytes In Use" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=90, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="memory_value_1">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="memory_value_2">
+        <title>% Servers -&gt; Pages/sec &gt; 1000</title>
+        <search>
+          <!--<query>sourcetype="perfmon:memory" counter="Pages/sec" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=1000, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="memory_value_2">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="memory_value_3">
+        <title>% Servers -&gt; Cache Bytes &gt; 300MB</title>
+        <search>
+          <!--<query>sourcetype="perfmon:memory" counter="Cache Bytes"| rename "Cached Bytes" AS CB | eval Value = CB/(1024*1024) | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=1000, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="memory_value_3">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <html>
+        <div>
+          <button class="btn btn-primary" id="more_memory">Show Metrics</button>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>Networking</title>
+      <single id="network_stats" depends="$networking_value_1$,$networking_value_2$">
+        <search>
+          <query>| stats count as value | eval value=if($networking_value_1$&gt;$networking_value_2$, $networking_value_1$, $networking_value_2$)  | rangemap field=value none=0-20 elevated=20-50 severe=50-100</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="classField">range</option>
+        <option name="field">value</option>
+      </single>
+      <html>
+      <div id="box-flow" style="padding-left:15px; font-size: 14px;" class="panel_summary">
+        <details ontoggle="mydetfunction()">
+            <summary>
+              <i class="icon-question-circle" style="font-size:16px;padding-left:5px;padding-right:5px;color:#007ABD;"/>
+              <i>
+                <b>Summary</b>
+              </i>
+            </summary>
+        <br/>
+        <p style="padding-right:20px;">These will be a great resource to diagnosis potential network bottlenecks.</p>
+          <ol style="padding-right:20px;">
+            <li>
+              <b>
+                <u>Bytes Total/sec</u>
+              </b> – measures the rate at which bytes are sent and received over each network adapter.<br/>
+              <ul>
+                <li>healthy – less than 40% of the interface consumed</li>
+                <li>caution – 41% – 60%</li>
+                <li>critical – 61% – 100%</li>
+              </ul>
+              The metric reported shows the percentage of servers in a cricial condition.
+            </li>
+            <li>
+              <b>
+                <u>Output Queue Length </u>
+              </b> – measures the length of the output packet queue in packets.<br/>
+              <ul>
+                <li>healthy – 0</li>
+                <li>caution – 1-2</li>
+                <li>critical – >2</li>
+              </ul>
+              The metric reported shows the percentage of servers in a cricial condition.
+            </li>
+          </ol>
+        </details>
+      </div> 
+      </html>
+      <viz type="status_indicator_app.status_indicator" id="networking_value_1">
+        <title>% Servers -&gt; Byte Total/sec 61%-100%</title>
+        <search>
+          <!--<query>sourcetype="Perfmon:Network_Interface" counter="Bytes Total/sec"| stats avg(Value) as AvgValue by Host | eval AvgValue = (AvgValue/(1024*1024*1024))*100 | eval type=if(AvgValue&gt;=60, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="networking_value_1">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <viz type="status_indicator_app.status_indicator" id="networking_value_2">
+        <title>% Servers -&gt; Output Queue Length &gt;2</title>
+        <search>
+          <!--<query>sourcetype="perfmon:network" counter="Output Queue Length" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=2, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=5 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="networking_value_2">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <html>
+        <div>
+          <button class="btn btn-primary" id="more_networking">Show Metrics</button>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>Paging Files</title>
+      <single id="paging_file_stats" depends="$paging_file_value_1$">
+        <search>
+          <query>| stats count as value | eval value=$paging_file_value_1$ | rangemap field=value none=0-20 elevated=20-50 severe=50-100</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="classField">range</option>
+        <option name="field">value</option>
+      </single>
+      <html>
+      <div id="box-flow" style="padding-left:15px; font-size: 14px;" class="panel_summary">
+        <details ontoggle="mydetfunction()">
+        <summary>
+              <i class="icon-question-circle" style="font-size:16px;padding-left:5px;padding-right:5px;color:#007ABD;"/>
+              <i>
+                <b>Summary</b>
+              </i>
+            </summary>
+        <br/>
+        <p style="padding-right:20px;">Paging File Counters</p>
+          <ol style="padding-right:20px;">
+            <li>
+                <b>
+                  <u>% Usage</u>
+                </b> – should not be greater than 10%.
+            </li>
+          </ol>
+        </details>
+      </div> 
+      </html>
+      <viz type="status_indicator_app.status_indicator" id="paging_file_value_1">
+        <title>% Servers -&gt; % Usage &gt;10</title>
+        <search>
+          <!--<query>sourcetype="perfmon:paging_file" counter="% Usage" | stats avg(Value) as AvgValue by Host | eval type=if(AvgValue&gt;=10, "Above", "Below") | stats count(eval(type="Above")) as Above, count(eval(type="Below")) as Below| eval percentAbove = round(((Above/(Below+Above))*100),1) | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA=percentAbove."%"| table PA color field_value percentAbove</query>-->
+          <query>| stats count as percentAbove | eval percentAbove=55 | eval color=case(percentAbove &lt; 20,"#00b33c", percentAbove &lt; 50,"#FFFF00", percentAbove &lt;= 100, "#FF0000") | eval PA = percentAbove."%" | table PA color field_value percentAbove</query>
+          <earliest>-5m@m</earliest>
+          <latest>now</latest>
+          <finalized>
+            <condition>
+              <set token="paging_file_value_1">$result.percentAbove$</set>
+            </condition>
+          </finalized>
+        </search>
+        <drilldown>
+          <link target="_blank">
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+          </link>
+        </drilldown>
+      </viz>
+      <html>
+        <div>
+          <button class="btn btn-primary" id="more_paging_file">Show Metrics</button>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+      <div class="reference">Based on the blogs <a href="https://www.nextofwindows.com/10-important-windows-performance-counters-you-should-know-of" target="_blank">"10 Important Windows Performance Counters You Should Know of"</a> and <a href="https://blog.heroix.com/blog/windows-cpu-metric-guide" target="_blank">"Windows CPU Metric Guide"</a>.</div>
+    </html>
+    </panel>
+  </row>
+  <row depends="$alwaysHideCSSStyle$">
+    <panel>
+      <html>
+        <style>
+          <!-- Format dashboard content layout -->
+          div.dashboard-layout-row-column.dashboard-layout-rowcolumn-rowcolumnlayout {
+            margin-top: 3%;
+          }
+          
+          <!-- Format single viz only (icon panels) -->
+          .dashboard-row .dashboard-panel .panel-element-row div.single {
+            background-color: black;
+            border-radius: 20px;
+          }
+          
+          <!-- Format viz belonging to cols -->
+          div.viz {
+            margin-top: 10px;
+          }
+ 
+          <!-- Format regular (no-icon) panel titles -->
+          .dashboard-row .dashboard-panel .panel-head h3 {
+            line-height: 1;
+            margin: 0;
+            padding: 12px 55px 10px 12px;
+            color: white;
+            text-rendering: auto;
+            word-wrap: break-word;
+            font-weight: 400;
+            font-size: 15px;
+            background: grey;
+            border-radius: 10px 10px 0px 0px;
+            box-shadow: 1px 1px 1px 1px black;
+          }
+          
+          <!-- Format icon panel title containers -->
+          div.dashboard-panel.with-title {
+            min-height: auto !important;
+            background: transparent !important; 
+          }
+          
+          <!-- Format icon panel titles -->
+          h2.panel-title {
+            background-color: #0066cc;
+            color: #E1E7E4;
+            border-radius: 20px 20px 0 0;
+            font-size: 20px !important;
+            box-shadow: 1px 1px 1px 1px grey;
+          }
+          
+          <!-- Format ALL panels -->
+          div.dashboard-panel {
+            background: transparent !important; 
+          }
+  
+          <!-- Format ALL table panel bodies -->
+          div.table div.panel-body {
+            border-radius: 0 0 0 0 !important;
+          }
+
+          <!-- Format ALL panel bodies -->
+          div.panel-body {
+            border-radius: 0 0 20px 20px;
+          }
+          
+          <!-- Format elements w/ specific value in id -->
+          div[id*='stats'].panel-body.dashboard-element-body {
+            box-shadow: 1px 1px 1px 1px grey;
+          }
+          div[id*='_value_'].panel-body.dashboard-element-body {
+            box-shadow: 1px 1px 1px 1px black;
+            background-color: #2c3840;
+          }
+          
+          <!-- Format Indicator panels -->
+          div.splunk-status-indicator {
+            font-size: 60px !important;
+            line-height: 220% !important;
+            height: 150px !important;
+          }
+          
+          <!-- Format ALL panel views -->
+          div.splunk-view {
+            height: 150px;
+          }
+          
+          <!-- Format Splunk Header/Footer -->
+          div.splunk-header.splunk-view,
+          div.splunk-footer.splunk-view {
+            height: auto;
+          }
+
+          <!-- Format dashboard title -->
+          .dashboard-header h2 {
+            font-size: 24px;
+            margin: 0;
+            padding: 0;
+            color: white;
+            padding-left: 0;
+            font-weight: bold;
+          }
+
+          <!-- Format dashboard body-->
+          .dashboard-body {
+            background: #31373e; /* Old browsers */
+            background: -moz-linear-gradient(top, #31373e 0%, #425260 50%, #596b82 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top, #31373e 0%,#425260 50%,#596b82 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom, #31373e 0%,#425260 50%,#596b82 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#31373e', endColorstr='#596b82',GradientType=0 ); /* IE6-9 */
+          }
+
+          <!-- Format table headers -->
+          table.thead.shared-resultstable-resultstableheader {
+            color: white;
+            background-color: #3385ff;
+          }
+
+          <!-- Format icon panels -->
+          div#singlevalue.viz-controller {
+            background-color: black;
+          }
+          
+          <!-- Format summary -->
+          .panel_summary {
+            color: white;
+            font-size: 14px;
+          }
+          <!-- Format custom footer -->
+          .reference {
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+          }
+          
+          <!-- Ensure body fills entire browser window -->
+          html, body {
+            height: 100%;
+          }
+          
+          .main-section-body{
+            min-height:100%;
+          }
+        </style>
+       </html>
+    </panel>
+  </row>
+</dashboard>
