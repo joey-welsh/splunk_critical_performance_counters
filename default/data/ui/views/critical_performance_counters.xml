@@ -1,3 +1,20 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @welshSplunker Sign out
+0
+0 0 welshSplunker/splunk_critical_performance_counters
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
+splunk_critical_performance_counters/default/data/ui/views/critical_performance_counters.xml
+9324e99  12 hours ago
+@welshSplunker welshSplunker Update critical_performance_counters.xml
+     
+Executable File  672 lines (650 sloc)  42 KB
 <form stylesheet="custom.css" hideAppBar="true" hideFooter="true" script="hideshow.js">
   <!-- Can replace form element with next line when Splunk version at 7.2+ and native dark mode is desired -->
   <!--<form theme="dark" stylesheet="custom.css" hideAppBar="true" hideFooter="true" script="hideshow.js">-->
@@ -89,7 +106,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -108,7 +125,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -180,7 +197,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -199,7 +216,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -218,7 +235,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -237,7 +254,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -306,7 +323,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -325,7 +342,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -344,7 +361,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -420,7 +437,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -439,7 +456,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
@@ -498,7 +515,7 @@
         </search>
         <drilldown>
           <link target="_blank">
-            <![CDATA[https://wu.splunkcloud.com/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
+            <![CDATA[https://localhost/en-US/app/splunk_app_windows_infrastructure/windows_performance?form.PerfmonHost=*&form.PerfmonHostWildcard=*&form.PageTime.earliest=-15m&form.PageTime.latest=now&form.CPUInstance=*&form.CPUCounter=%25%20C1%20Time&form.MemoryCounter=%25%20Committed%20Bytes%20In%20Use&form.PhysicalDiskInstance=*&form.PhysicalDiskCounter=%25%20Idle%20Time&form.LogicalDiskInstance=*&form.LogicalDiskCounter=%25%20Disk%20Read%20Time&form.NetworkInterfaceInstance=*&form.NetworkInterfaceCounter=Bytes%20Received%2Fsec&form.SystemCounter=%25%20Registry%20Quota%20In%20Use&form.ProcessInstance=*&form.ProcessCounter=%25%20Privileged%20Time]]>
           </link>
         </drilldown>
       </viz>
