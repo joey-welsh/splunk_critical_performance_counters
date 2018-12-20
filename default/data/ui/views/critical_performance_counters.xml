@@ -1,20 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @welshSplunker Sign out
-0
-0 0 welshSplunker/splunk_critical_performance_counters
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
-splunk_critical_performance_counters/default/data/ui/views/critical_performance_counters.xml
-9324e99  12 hours ago
-@welshSplunker welshSplunker Update critical_performance_counters.xml
-     
-Executable File  672 lines (650 sloc)  42 KB
 <form stylesheet="custom.css" hideAppBar="true" hideFooter="true" script="hideshow.js">
   <!-- Can replace form element with next line when Splunk version at 7.2+ and native dark mode is desired -->
   <!--<form theme="dark" stylesheet="custom.css" hideAppBar="true" hideFooter="true" script="hideshow.js">-->
